@@ -7,6 +7,8 @@
 Добавьте ссылку на файл в этот шаблон
 [ссылка на файл](ссылка)
 
+[New Architecture](./New_Architecture.puml)
+
 # Задание 2
 
 ### 1. Proxy
