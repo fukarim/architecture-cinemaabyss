@@ -1,0 +1,64 @@
+@startuml
+title Cinema Abyss New Architecture Container Diagram
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Person(User, "User", "A user of the Cinema Abyss system")
+
+Container(WebApp, "Web Application", "NodeJs, React", "Handles user interactions via browser")
+Container(MobileApp, "Mobile Application", "React Native", "Handles user interactions via smartphones")
+Container(SmartTVApp, "Smart TV Application", "React", "Handles user interactions via smart TV devices")
+
+Container(Gateway, "Gateway", "Go", "Proxy requests to microservices")
+
+Container(UserManagementService, "User Management Service", "Go", "Handles user settings")
+SystemDb(UserManagementDb, "User Management Db", "Store user settings")
+
+Container(SubscriptionService, "Subscription Service", "Go", "Handles paid subscriptions")
+SystemDb(SubscriptionDb, "Subscriptions Db", "Store subscription data")
+
+Container(BillingService, "Billing Service", "Go", "Handles payments")
+SystemDb(BillingDb, "Billing Db", "Store payments data")
+System_Ext(ExternalPaymentProvider, "External Payment Provider", "Handle communication with external payment system")
+
+Container(VideoStreamingService, "Video Streaming Service", "Go", "Stream video")
+System_Ext(ExternalVideoStreaming, "External Video Streaming", "Get video stream")
+
+Container(CinemaMetadataService, "Cinema Metadata Service", "Go", "Handles cinema metadata")
+SystemDb(CinemaMetadataDb, "Cinema Metadata Db", "Store cinemas metadata")
+
+Container(RecommenderService, "Recommender Service", "Go", "Handles user recommendations")
+SystemDb(RecommenderDb, "Recommender Db", "Store user recommendations")
+
+SystemQueue(MessageBroker, "Message Broker", "Manage user interactions")
+
+Rel(User, WebApp, "Uses the system")
+Rel(User, MobileApp, "Uses the system")
+Rel(User, SmartTVApp, "Uses the system")
+Rel(WebApp, Gateway, "Handle application interactions")
+Rel(MobileApp, Gateway, "Handle application interactions")
+Rel(SmartTVApp, Gateway, "Handle application interactions")
+Rel(Gateway,UserManagementService, "Manage user settings")
+Rel(UserManagementService,UserManagementDb, "Read/Write user settings")
+Rel(Gateway,SubscriptionService, "Manage paid subscriptions")
+Rel(SubscriptionService,SubscriptionDb, "Read/Write subscription data")
+Rel(SubscriptionService,BillingService, "Manage payments")
+Rel(BillingService,BillingDb, "Read/Write billing data")
+Rel(BillingService,ExternalPaymentProvider, "Manage external payments")
+Rel(Gateway,VideoStreamingService, "Manage video streaming data")
+Rel(VideoStreamingService,ExternalVideoStreaming, "Manage external video streaming data")
+Rel(VideoStreamingService,SubscriptionService, "Check subscription existing")
+Rel(Gateway,CinemaMetadataService, "Manage cinema metadata")
+Rel(CinemaMetadataService,CinemaMetadataDb, "Read/Write cinema metadata")
+Rel(Gateway,RecommenderService, "Manage user recommendations")
+Rel(RecommenderService,RecommenderDb, "Read/Write user recommendations")
+Rel(RecommenderService,CinemaMetadataService, "Get cinemas metadata for recommendations")
+
+Rel(CinemaMetadataService,MessageBroker, "Send message about cinema interests")
+Rel(VideoStreamingService, MessageBroker, "Send message about watching video behaviour")
+Rel(UserManagementService, MessageBroker, "Send message about user")
+Rel(RecommenderService, MessageBroker, "Handle message for recommendations")
+
+@enduml

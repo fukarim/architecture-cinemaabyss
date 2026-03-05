@@ -7,6 +7,8 @@
 Добавьте ссылку на файл в этот шаблон
 [ссылка на файл](ссылка)
 
+[New Architecture](./New_Architecture.puml)
+
 # Задание 2
 
 ### 1. Proxy
@@ -58,6 +60,10 @@
 
 Необходимые тесты для проверки этого API вызываются при запуске npm run test:local из папки tests/postman 
 Приложите скриншот тестов и скриншот состояния топиков Kafka из UI http://localhost:8090 
+
+![Зеленые тесты](./assets/green-tests.png)
+
+![Топики в Kafka](./assets/kafka.png)
 
 # Задание 3
 
